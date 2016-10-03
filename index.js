@@ -1,4 +1,24 @@
+// TODO: fix
+// in collection-> doc->row fields of type boolean work only with type object
+// in collection-> doc->row fields types are only lower case in columns only uppercase
+// in collection-> doc->row _id field does not work
+// use command node parse-schema.js | pbcopy
+
+
 'use strict';
+
+const toDSLType = (mongoType, capital) => {
+    const typeMap = {
+        ObjecID: 'string',
+        String: 'string',
+        Document: 'object',
+        Boolean: 'object',
+        Null: 'string'
+    }
+    return capital ? _.capitalize(typeMap[mongoType] || 'string') : typeMap[mongoType] || 'string'; //`not valid ${mongoType}`;
+}
+
+
 const _ = require('lodash');
 
 const getLink = (data) =>
@@ -15,58 +35,62 @@ const getImage = (data) =>
   \t)
   `;
 
-const getRow = (data) =>
+const getRow = (data,i) =>
     `
-  \trow(
-  \t name: "${data.name}",
-  \t label: "${data.label}",
-  \t type: "${data.type}"
-  \t)
+  \t\trow(
+  \t\t name: "${data.name}",
+  \t\t label: "${data.label}",
+  \t\t type: "${toDSLType(data.type, false)}"
+  \t\t)
   `;
 
 const getArrayRows = (data) => {
     let finalRow = '';
-    _.each(data.rows, (value) => finalRow += getRow(value));
+    _.each(data.columns, (row) => {
+        if(!_.includes(row.name, '_id')){
+            finalRow += getRow(row)
+        }
+        
+    });
     // data.rows.forEach((value) => finalRow += value);
     return finalRow;
 };
 
-const getColumn = (data) =>
+const getColumn = (data,i) =>
     `
   \tcolumn(
   \t name: "${data.name}",
   \t label: "${data.label}",
-  \t type: "${data.type}"
+  \t type: "${toDSLType(data.type, true)}",
+  \t selectable: ${0===i? 'true': 'false'}
   \t)
   `;
 
 const getArrayColumns = (data) => {
     let finalColumn = '';
-    _.each(data.columns, (value) => finalColumn += getColumn(value))
+    _.each(data.columns, (value, i) => finalColumn += getColumn(value,i))
         // data.columns.forEach((value) => finalColumn += value)
     return finalColumn;
 };
 
-const getDocument = (data) =>
-    `Document ( 
-  \ttable:  "${data.table}",
-  \tlabel:  "${data.label}",
-  \tsortby: "${data.sortby}",
-  \torder:  "${data.order}",
-  \tquery:  "${data.query}"
-) {
-${getArrayRows(data)}
-}`;
+const getDocument = (data) => {
+    return `
+    Document ( 
+    \t) {
+        ${getArrayRows(data)}
+    }`
+};
 
 const getCollection = (data) =>
-    `Collection(
+    `
+    Collection(
   \ttable:   "${data.table}",
   \tlabel:   "${data.label}",
   \tsortby:  "${data.sortby}",
   \torder:   "${data.order}",
   \tquery:   "${data.query}",
-  \tperpage: "${data.perpage}"
-) {
+  \tperpage: 30
+\t) {
 ${getArrayColumns(data)}
 ${getDocument(data)}
 }`;

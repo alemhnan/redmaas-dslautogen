@@ -6,15 +6,16 @@ var client = require('mongodb').MongoClient;
 var _ = require('lodash');
 var dslUtils = require('./index.js');
 
-function toDSLType(mongoType){
+function toDSLType(mongoType, capital){
   const typeMap ={
-    ObjecID:'String',
-    String: 'String',
-    Document: 'Object',
-    Boolean: 'String',
-    Null: 'String'
+    ObjecID: 'string',
+    String: 'string',
+    Document: 'object',
+    Boolean: 'string',
+    Null: 'string'
   }
-  return typeMap[mongoType] || `not valid ${mongoType}`;
+  console.log(capital?true:false);
+  return capital? _.capitalize(typeMap[mongoType] || 'string'): typeMap[mongoType] || 'string';//`not valid ${mongoType}`;
 }
 
 client.connect('mongodb://localhost:27017/maas', function(err, db) {
@@ -64,7 +65,7 @@ client.connect('mongodb://localhost:27017/maas', function(err, db) {
             collection.columns.push({
                 name: val.name,
                 label: val.name,
-                type : toDSLType(val.type),
+                type : val.type,
             })
 
 
