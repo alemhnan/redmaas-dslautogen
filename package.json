@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "mongodb": "2.2.10"
+    "bluebird": "^3.4.6",
+    "jscs": "^3.0.7",
+    "lodash": "^4.16.2",
+    "mongodb": "^2.2.10",
+    "mongodb-schema": "^5.0.0"
   },
   "devDependencies": {},
   "scripts": {
