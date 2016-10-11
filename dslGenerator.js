@@ -52,7 +52,9 @@ function DbCollectionToDSL(dbConnection, collectionName) {
             throw err;
         })
         .finally(() => {
-            db.close();
+            if (db) {
+                db.close();
+            }
         });
 }
 
@@ -83,7 +85,9 @@ function DbToDSL(dbConnection) {
             throw err;
         })
         .finally(() => {
-            db.close();
+            if (db) {
+                db.close();
+            }
         });
 }
 
