@@ -7,6 +7,8 @@
 
 'use strict';
 
+const _ = require('lodash');
+
 const toDSLType = (mongoType, capital) => {
     const typeMap = {
         ObjecID: 'string',
@@ -17,9 +19,6 @@ const toDSLType = (mongoType, capital) => {
     }
     return capital ? _.capitalize(typeMap[mongoType] || 'string') : typeMap[mongoType] || 'string'; //`not valid ${mongoType}`;
 }
-
-
-const _ = require('lodash');
 
 const getLink = (data) =>
     `link(
@@ -37,11 +36,11 @@ const getImage = (data) =>
 
 const getRow = (data,i) =>
     `
-  \t\trow(
-  \t\t name: "${data.name}",
-  \t\t label: "${data.label}",
-  \t\t type: "${toDSLType(data.type, false)}"
-  \t\t)
+  \t   row(
+  \t    name: "${data.name}",
+  \t    label: "${data.label}",
+  \t    type: "${toDSLType(data.type, false)}"
+  \t   )
   `;
 
 const getArrayRows = (data) => {
@@ -73,69 +72,29 @@ const getArrayColumns = (data) => {
     return finalColumn;
 };
 
-const getDocument = (data) => {
+const getCollectionDocument = (data) => {
     return `
-    Document ( 
+    \tDocument (
+         
     \t) {
         ${getArrayRows(data)}
-    }`
+    \t}`
 };
 
 const getCollection = (data) =>
     `
     Collection(
-  \ttable:   "${data.table}",
-  \tlabel:   "${data.label}",
-  \tsortby:  "${data.sortby}",
-  \torder:   "${data.order}",
-  \tquery:   "${data.query}",
-  \tperpage: 30
-\t) {
-${getArrayColumns(data)}
-${getDocument(data)}
-}`;
+    \ttable:   "${data.table}",
+    \tlabel:   "${data.label}",
+    \tsortby:  "${data.sortby}",
+    \torder:   "${data.order}",
+    \tquery:   "${data.query}",
+    \tperpage: 30
+    ) {
+        ${getArrayColumns(data)}
+        ${getCollectionDocument(data)}
+    }`;
 
-////////////////////////////
-
-
-
-
-
-
-
-
-// const rows = [];
-// rows.push(getRow({ name: 'surname', label: 'Surname', type: 'string' }));
-// rows.push(getRow({ name: 'name', label: 'Name', type: 'string' }));
-
-// const columns = [];
-// columns.push(getColumn({ name: 'surname', label: 'Surname', type: 'string' }));
-// columns.push(getColumn({ name: 'name', label: 'Name', type: 'string' }));
-
-// const dataDocument = {
-//   table: 'users',
-//   label: 'MyUsers',
-//   sortby: 'surname',
-//   order: 'asc',
-//   query: '{ age : { $lt : 40 } }',
-//   rows,
-// };
-
-// const dataCollection = {
-//   table: 'customers',
-//   label: 'JuniorCustomers',
-//   perpage: '20',
-//   sortby: 'surname',
-//   order: 'asc',
-//   query: '{ age: { $lt: 40} }',
-//   columns,
-//   document: dataDocument
-// };
-
-// console.log(getArrayRows(rows));
-// console.log(getDocument(dataDocument));
-// console.log(getCollection(dataCollection));
 module.exports = {
     getCollection,
-    getDocument,
 };
