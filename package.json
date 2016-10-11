@@ -1,8 +1,8 @@
 {
-  "name": "mongodbdslinstrospection",
-  "version": "1.0.0",
+  "name": "redmaas-dslautogen",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "dslGenerator.js",
   "dependencies": {
     "bluebird": "^3.4.6",
     "jscs": "^3.0.7",
@@ -14,6 +14,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Alessandro Maccagnan <alessandro.maccagnan@gmail.com> (http://www.redbabel.com)",
-  "license": "ISC"
+  "author": {
+    "name": "Milo Ertola",
+    "email": "milo@redbabel.com",
+    "url": "https://github.com/redbabel"
+  },
+  "contributors": [],
+  "homepage": "https://github.com/redbabel/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redbabel/redmaas-dslautogen.git"
+  },
+  "license": "MIT",
+  "_npmVersion": "2.15.9",
+  "_nodeVersion": "4.5.0",
+  "_npmUser": {
+    "name": "redbabel",
+    "email": "dev@redbabel.com"
+  }
 }
