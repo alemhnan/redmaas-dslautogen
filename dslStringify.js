@@ -10,14 +10,28 @@
 const _ = require('lodash');
 
 const toDSLType = (mongoType, capital) => {
+    const type = _.toLower(mongoType);
     const typeMap = {
-        ObjecID: 'string',
-        String: 'string',
-        Document: 'object',
-        Boolean: 'object',
-        Null: 'string'
+        undefined: 'string',
+        objecid: 'string',
+        boolean: 'object',
+        date: 'string',
+        null: 'string',
+        regex: 'string',
+        dbPointer: 'string',
+        javascript: 'string',
+        symbol: 'string',
+        javascriptWithScope: 'string',
+        int: 'number',
+        integer: 'number',
+        timestamp: 'number',
+        long: 'number',
+        minKey: 'number',
+        maxKey: 'number',
+        string: 'string',
+        document: 'object',
     }
-    return capital ? _.capitalize(typeMap[mongoType] || 'string') : typeMap[mongoType] || 'string'; //`not valid ${mongoType}`;
+    return capital ? _.capitalize(typeMap[type] || 'string') : typeMap[type] || 'string'; //`not valid ${type}`;
 }
 
 const getLink = (data) =>
@@ -34,7 +48,7 @@ const getImage = (data) =>
   \t)
   `;
 
-const getRow = (data,i) =>
+const getRow = (data, i) =>
     `
   \t   row(
   \t    name: "${data.name}",
@@ -46,16 +60,16 @@ const getRow = (data,i) =>
 const getArrayRows = (data) => {
     let finalRow = '';
     _.each(data.columns, (row) => {
-        if(!_.includes(row.name, '_id')){
+        if (!_.includes(row.name, '_id')) {
             finalRow += getRow(row)
         }
-        
+
     });
     // data.rows.forEach((value) => finalRow += value);
     return finalRow;
 };
 
-const getColumn = (data,i) =>
+const getColumn = (data, i) =>
     `
   \tcolumn(
   \t name: "${data.name}",
@@ -67,7 +81,7 @@ const getColumn = (data,i) =>
 
 const getArrayColumns = (data) => {
     let finalColumn = '';
-    _.each(data.columns, (value, i) => finalColumn += getColumn(value,i))
+    _.each(data.columns, (value, i) => finalColumn += getColumn(value, i))
         // data.columns.forEach((value) => finalColumn += value)
     return finalColumn;
 };
