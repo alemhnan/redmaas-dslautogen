@@ -14,7 +14,7 @@ function queryToDSL(dbCollection, options) {
                 label: dbCollection.s.name,
                 sortby: (_(schema.fields).size()?_(schema.fields).first().name:''),
                 order: 'asc',
-                query: null,
+                query: '',
                 columns: [],
                 actions: [{
                     Export: true,
