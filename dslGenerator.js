@@ -12,7 +12,7 @@ function queryToDSL(dbCollection, options) {
             const collectionObj = _.extend({
                 table: dbCollection.s.name,
                 label: dbCollection.s.name,
-                sortby: _(schema.fields).first().name,
+                sortby: (_(schema.fields).size()?_(schema.fields).first().name:''),
                 order: 'asc',
                 query: null,
                 columns: [],
