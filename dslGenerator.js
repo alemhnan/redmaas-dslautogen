@@ -6,21 +6,21 @@ const mongoConnect = Promise.promisify(require('mongodb').MongoClient.connect);
 const _ = require('lodash');
 const dslUtils = require('./dslStringify.js');
 
-function queryToDSL(dbCollection) {
+function queryToDSL(dbCollection, options) {
     return parseSchema(dbCollection.find())
         .then(schema => {
-            const collectionObj = {
+            const collectionObj = _.extend({
                 table: dbCollection.s.name,
                 label: dbCollection.s.name,
                 sortby: _(schema.fields).first().name,
                 order: 'asc',
-                query: '',
+                query: null,
                 columns: [],
                 actions: [{
                     Export: true,
-                }]
-            };
-
+                }],
+                dsl: null,
+            }, options)
             _(schema.fields).each((val) => {
                 collectionObj.columns.push({
                     name: val.name,
@@ -28,7 +28,8 @@ function queryToDSL(dbCollection) {
                     type: val.type,
                 });
             });
-            return dslUtils.getCollection(collectionObj);
+            collectionObj.dsl = dslUtils.getCollection(collectionObj);
+            return collectionObj;
         })
         .catch(err => {
             console.log(err)
@@ -37,12 +38,12 @@ function queryToDSL(dbCollection) {
 }
 
 
-function DbCollectionToDSL(dbConnection, collectionName) {
+function DbCollectionToDSL(dbConnection, collectionName, options) {
     let db = null;
     return mongoConnect(dbConnection)
         .then(dbObj => {
             db = dbObj;
-            return queryToDSL(db.collection(`${collectionName}`))
+            return queryToDSL(db.collection(`${collectionName}`), options)
         })
         .then(dsl => {
             return dsl;
@@ -59,7 +60,7 @@ function DbCollectionToDSL(dbConnection, collectionName) {
 }
 
 
-function DbToDSL(dbConnection) {
+function DbToDSL(dbConnection, options) {
     let db = null;
     return mongoConnect(dbConnection)
         .then(dbObj => {
@@ -72,7 +73,7 @@ function DbToDSL(dbConnection) {
                     return !_.includes(item.s.name, 'system.index');
                 })
                 .map((item) => {
-                    return queryToDSL(item);
+                    return queryToDSL(item, options);
                 })
                 .value();
             return Promise.all(qCollections);
