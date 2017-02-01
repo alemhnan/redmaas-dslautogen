@@ -1,20 +1,12 @@
 const generator = require('./dslGenerator.js');
 
-const dbString = 'mongodb://localhost:27017/maas';
+const dbString = 'mongodb://localhost:27017/redmaas';
 const collectionName = 'user';
-generator.DbCollectionToDSL(dbString, collectionName, {
-        actions: [{
-            Exports: false
-        }]
-    })
-    .then(dsl => {
-        console.log(dsl);
-    });
-generator.DbToDSL(dbString, {
-        actions: [{
-            Exports: false
-        }]
-    })
-    .then(dslList => {
-        console.log(dslList.length);
-    });
+
+generator
+    .DbCollectionToDSL(dbString, collectionName, { actions: [{ Exports: false }] })
+    .then(dsl => console.log(dsl));
+
+generator
+    .DbToDSL(dbString, { actions: [{ Exports: false }] })
+    .then(dslList => console.log(dslList.length));

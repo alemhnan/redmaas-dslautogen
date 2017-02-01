@@ -35,26 +35,14 @@ const toDSLType = (mongoType, capital) => {
 }
 
 const getLink = (data) =>
-    `link(
-   \tlabel: "${data.text}"
-)
-`;
+    `link(label: "${data.text}")`;
 
 const getImage = (data) =>
-    `
-  \timage(
-  \t height: "${data.height}"
-  \t width: "${data.width}"
-  \t)
-  `;
+    `image(height: "${data.height}"width: "${data.width}")`;
 
 const getRow = (data, i) =>
     `
-  \t   row(
-  \t    name: "${data.name}",
-  \t    label: "${data.label}",
-  \t    type: "${toDSLType(data.type, false)}"
-  \t   )
+  \t   row(name: "${data.name}",label: "${data.label}",type: "${toDSLType(data.type, false)}")
   `;
 
 const getArrayRows = (data) => {
@@ -71,40 +59,26 @@ const getArrayRows = (data) => {
 
 const getColumn = (data, i) =>
     `
-  \tcolumn(
-  \t name: "${data.name}",
-  \t label: "${data.label}",
-  \t type: "${toDSLType(data.type, true)}",
-  \t selectable: ${0===i? 'true': 'false'}
-  \t)
-  `;
+    \tcolumn(name: "${data.name}", label: "${data.label}", type: "${toDSLType(data.type, true)}", selectable: ${0 === i ? 'true' : 'false'})
+    `;
 
 const getArrayColumns = (data) => {
     let finalColumn = '';
     _.each(data.columns, (value, i) => finalColumn += getColumn(value, i))
-        // data.columns.forEach((value) => finalColumn += value)
+    // data.columns.forEach((value) => finalColumn += value)
     return finalColumn;
 };
 
 const getCollectionDocument = (data) => {
     return `
-    \tDocument (
-         
-    \t) {
+    \tDocument () {
         ${getArrayRows(data)}
     \t}`
 };
 
 const getCollection = (data) =>
     `
-    Collection(
-    \ttable:   "${data.table}",
-    \tlabel:   "${data.label}",
-    \tsortby:  "${data.sortby}",
-    \torder:   "${data.order}",
-    \tquery:   "${data.query}",
-    \tperpage: 30
-    ) {
+    Collection(table:"${data.table}", label:"${data.label}", sortby:"${data.sortby}", order:"${data.order}", query:"${data.query}", perpage: 30) {
         ${getArrayColumns(data)}
         ${getCollectionDocument(data)}
     }`;
