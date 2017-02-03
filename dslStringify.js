@@ -35,14 +35,14 @@ const toDSLType = (mongoType, capital) => {
 }
 
 const getLink = (data) =>
-    `link(label: "${data.text}")`;
+    `link(label:"${data.text}")`;
 
 const getImage = (data) =>
-    `image(height: "${data.height}"width: "${data.width}")`;
+    `image(height:"${data.height}", width:"${data.width}")`;
 
 const getRow = (data, i) =>
     `
-  \t   row(name: "${data.name}",label: "${data.label}",type: "${toDSLType(data.type, false)}")
+  \t   row(name:"${data.name}", label:"${data.label}", type:"${toDSLType(data.type, false)}")
   `;
 
 const getArrayRows = (data) => {
@@ -59,7 +59,7 @@ const getArrayRows = (data) => {
 
 const getColumn = (data, i) =>
     `
-    \tcolumn(name: "${data.name}", label: "${data.label}", type: "${toDSLType(data.type, true)}", selectable: ${0 === i ? 'true' : 'false'})
+    \tcolumn(name:"${data.name}", label:"${data.label}", type:"${toDSLType(data.type, true)}", selectable: ${0 === i ? 'true' : 'false'})
     `;
 
 const getArrayColumns = (data) => {
