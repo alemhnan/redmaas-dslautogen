@@ -79,8 +79,8 @@ const getCollectionDocument = (data) => {
 const getCollection = (data) =>
     `
     Collection(table:"${data.table}", label:"${data.label}", sortby:"${data.sortby}", order:"${data.order}", query:"${data.query}", perpage: 30) {
-        ${getArrayColumns(data)}
         ${getCollectionDocument(data)}
+        ${getArrayColumns(data)}
     }`;
 
 module.exports = {
