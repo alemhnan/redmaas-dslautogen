@@ -1,6 +1,6 @@
 const generator = require('./dslGenerator.js');
 
-const dbString = 'mongodb://localhost:27017/redmaas';
+const dbString = 'mongodb://localhost:27017/redmongo';
 const collectionName = 'user';
 
 generator

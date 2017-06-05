@@ -1,6 +1,6 @@
 {
-  "name": "redmaas-dslautogen",
-  "version": "0.3.2",
+  "name": "redmongo-dslautogen",
+  "version": "0.3.3",
   "description": "",
   "main": "dslGenerator.js",
   "dependencies": {
@@ -34,7 +34,7 @@
   "homepage": "https://github.com/redbabel/",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/redbabel/redmaas-dslautogen"
+    "url": "git+ssh://git@github.com/redbabel/redmongo-dslautogen"
   },
   "license": "MIT",
   "_npmVersion": "2.15.9",
