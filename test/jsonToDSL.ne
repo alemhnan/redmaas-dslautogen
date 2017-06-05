@@ -1,7 +1,7 @@
 # http://www.json.org/
 # http://www.asciitable.com/
 
-json -> [\s]:* (object | array) [\s]:* {% function(d) { return d[1][0]; } %}
+json -> [\s]:* (object | array | value) [\s]:* {% function(d) { console.log(d);return d[1][0]; } %}
 
 object -> "{" _ "}" {% function(d) { return {}; } %}
     | "{" _ pair (_ "," _ pair):* _ "}" {% extractObject %}
