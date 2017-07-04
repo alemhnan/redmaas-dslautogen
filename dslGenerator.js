@@ -66,6 +66,7 @@ const getCollectionNames = (mongodbUrl, options) => {
         })
         .then((collections) => _(collections)
             .filter((item) => !_.includes(item.s.name, 'system.index'))
+            .map(item => item.s.name)
             .value())
         .finally(() => {
             if (db) {
