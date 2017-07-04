@@ -1,5 +1,3 @@
-'use strict';
-
 const Promise = require('bluebird');
 const parseSchema = Promise.promisify(require('mongodb-schema'));
 const mongoConnect = Promise.promisify(require('mongodb').MongoClient.connect);
@@ -12,7 +10,7 @@ function queryToDSL(dbCollection, options) {
             const collectionObj = _.extend({
                 table: dbCollection.s.name,
                 label: dbCollection.s.name,
-                sortby: (_(schema.fields).size()?_(schema.fields).first().name:''),
+                sortby: (_(schema.fields).size() ? _(schema.fields).first().name : ''),
                 order: 'asc',
                 query: '',
                 columns: [],
@@ -59,6 +57,22 @@ function DbCollectionToDSL(dbConnection, collectionName, options) {
         });
 }
 
+const getCollectionNames = (mongodbUrl, options) => {
+    let db;
+    return mongoConnect(mongodbUrl)
+        .then(_db => {
+            db = _db;
+            return db.collections();
+        })
+        .then((collections) => _(collections)
+            .filter((item) => !_.includes(item.s.name, 'system.index'))
+            .value())
+        .finally(() => {
+            if (db) {
+                db.close();
+            }
+        });
+};
 
 function DbToDSL(dbConnection, options) {
     let db = null;
@@ -95,4 +109,5 @@ function DbToDSL(dbConnection, options) {
 module.exports = {
     DbCollectionToDSL,
     DbToDSL,
+    getCollectionNames
 };
