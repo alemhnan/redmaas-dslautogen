@@ -66,6 +66,8 @@ const getCollectionNames = (mongodbUrl, options) => {
         })
         .then((collections) => _(collections)
             .filter((item) => !_.includes(item.s.name, 'system.index'))
+            .filter((item) => !_.includes(item.s.name, 'objectlabs-system.admin.collections'))
+            .filter((item) => !_.includes(item.s.name, 'objectlabs-system'))
             .map(item => item.s.name)
             .value())
         .finally(() => {
